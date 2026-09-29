@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MillarSystems.ca | PC Troubleshooting and Data Networking</title>
+  <meta name="description" content="Freelance PC troubleshooting and data networking services. Slow computers, Wi-Fi problems, network setup and more. Email info@millarsystems.ca for a price quote.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%96%A5%EF%B8%8F%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --paper: #EEF1F3;
+      --ink: #16222D;
+      --ink-soft: #4A5866;
+      --rule: #C7CFD6;
+      --blue: #1B5CBA;
+      --blue-deep: #144690;
+      --panel: #16222D;
+      --panel-text: #EEF1F3;
+
+      --w-orange: #E8792B;
+
+      --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+      --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--blue); }
+    a:focus-visible, .button:focus-visible {
+      outline: 3px solid var(--w-orange);
+      outline-offset: 3px;
+    }
+
+    .wrap {
+      width: min(100% - 2.5rem, 68rem);
+      margin-inline: auto;
+    }
+
+    /* ---------- Header ---------- */
+    header.site {
+      padding-block: 1.5rem;
+    }
+    header.site .wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .logo {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 1.35rem;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .logo span { color: var(--blue); }
+    nav a {
+      margin-left: 1.5rem;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.98rem;
+    }
+    nav a:hover { color: var(--blue); text-decoration: underline; text-underline-offset: 4px; }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      padding-block: clamp(2.5rem, 7vw, 5.5rem) clamp(2.5rem, 6vw, 4.5rem);
+    }
+    .hero h1 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: clamp(2.5rem, 7.2vw, 5.4rem);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      margin: 0 0 1.5rem;
+    }
+    .hero p.lead {
+      font-size: clamp(1.1rem, 2vw, 1.3rem);
+      color: var(--ink-soft);
+      margin: 0 0 2rem;
+    }
+
+    .button {
+      display: inline-block;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 0.85rem 1.5rem;
+      border-radius: 4px;
+      transition: background 0.15s ease;
+    }
+    .button:hover { background: var(--blue-deep); }
+
+    /* The one memorable element: a thin network strip that draws itself once */
+    .diagram {
+      margin-top: clamp(2rem, 5vw, 3rem);
+      padding-block: calc(0.9rem + 2px);
+    }
+    .diagram svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+    .diagram svg.wide { display: none; }
+    @media (min-width: 700px) {
+      .diagram svg.compact { display: none; }
+      .diagram svg.wide { display: block; }
+    }
+
+    .diagram .line {
+      fill: none;
+      stroke: var(--ink);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .diagram .line.dashed { stroke-dasharray: 1 8; }
+    .diagram .shape {
+      fill: #fff;
+      stroke: var(--ink);
+      stroke-width: 3.5;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+    .diagram .cloud { fill: var(--blue); stroke: var(--ink); stroke-width: 3.5; stroke-linejoin: round; }
+
+    .diagram .draw {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: draw 2.2s linear forwards;
+    }
+    .diagram .pop {
+      opacity: 0;
+      animation: pop 0.4s ease-out forwards;
+    }
+
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+    @keyframes pop  { to { opacity: 1; } }
+
+    /* ---------- Sections ---------- */
+    section { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
+    h2 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin: 0 0 2rem;
+    }
+
+    /* Services */
+    .service {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+      gap: 1.5rem 3rem;
+      padding-block: 2rem;
+      border-top: 2px solid var(--ink);
+    }
+    .service:last-of-type { border-bottom: 2px solid var(--ink); }
+    .service h3 {
+      font-family: var(--display);
+      font-size: 1.6rem;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      margin: 0 0 0.6rem;
+    }
+    .service p { margin: 0; color: var(--ink-soft); max-width: 30rem; }
+    .service ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .service li {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .service li:first-child { padding-top: 0; }
+    .service li:last-child { border-bottom: 0; padding-bottom: 0; }
+
+    /* Process (a real sequence, so numbered) */
+    .steps {
+      list-style: none;
+      counter-reset: step;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2rem;
+    }
+    .steps li { counter-increment: step; }
+    .steps li::before {
+      content: counter(step);
+      display: block;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 3rem;
+      line-height: 1;
+      color: var(--blue);
+      margin-bottom: 0.5rem;
+    }
+    .steps h3 {
+      font-family: var(--display);
+      font-size: 1.25rem;
+      margin: 0 0 0.4rem;
+    }
+    .steps p { margin: 0; color: var(--ink-soft); }
+
+    /* Quote / contact */
+    .quote {
+      background: var(--panel);
+      color: var(--panel-text);
+      padding-block: clamp(3rem, 8vw, 5.5rem);
+    }
+    .quote h2 { margin-bottom: 1rem; }
+    .quote p { max-width: 36rem; margin: 0 0 1.75rem; color: #C9D2DA; font-size: 1.15rem; }
+    .quote .email {
+      display: inline-block;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: clamp(1.4rem, 4.5vw, 2.4rem);
+      letter-spacing: -0.01em;
+      color: #fff;
+      text-decoration: underline;
+      text-decoration-color: var(--w-orange);
+      text-decoration-thickness: 4px;
+      text-underline-offset: 8px;
+      overflow-wrap: anywhere;
+    }
+    .quote .email:hover { text-decoration-color: #fff; }
+    .quote a:focus-visible { outline-color: var(--w-orange); }
+
+    footer {
+      padding-block: 1.75rem;
+      color: var(--ink-soft);
+      font-size: 0.92rem;
+    }
+
+    /* ---------- Small screens ---------- */
+    @media (max-width: 760px) {
+      nav a { margin-left: 0; margin-right: 1.25rem; }
+      .service { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; gap: 1.75rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .diagram .draw { animation: none; stroke-dashoffset: 0; }
+      .diagram .pop { animation: none; opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site">
+    <div class="wrap">
+      <a class="logo" href="#top">Millar<span>Systems</span>.ca</a>
+      <nav aria-label="Main">
+        <a href="#services">Services</a>
+        <a href="#process">How it works</a>
+        <a href="#quote">Get a quote</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="wrap">
+      <div class="hero">
+        <h1>Computer trouble fixed. Networks done right.</h1>
+        <p class="lead">
+          Freelance PC troubleshooting and data networking for homes and small offices.
+          Clear answers, honest advice, and fixes that stick.
+        </p>
+        <a class="button" href="#quote">Get a price quote</a>
+
+        <div class="diagram" aria-hidden="true">
+          <svg class="compact" viewBox="0 0 760 90" xmlns="http://www.w3.org/2000/svg" focusable="false">
+
+            <!-- The connection runs left to right and each device appears as it is reached -->
+            <path class="line draw" pathLength="1" d="M82 45 H646" style="animation-delay:0.3s"/>
+
+            <!-- Internet -->
+            <g class="pop" style="animation-delay:0s">
+              <path class="cloud" d="M20 60 C6 60 4 42 18 40 C17 26 38 20 48 32 C58 22 76 29 72 44 C84 45 84 60 70 60 Z"/>
+            </g>
+
+            <!-- Router -->
+            <g class="pop" style="animation-delay:0.45s">
+              <path class="shape" d="M143 30 L137 12 M177 30 L183 12"/>
+              <rect class="shape" x="125" y="30" width="70" height="30" rx="6"/>
+              <circle cx="145" cy="45" r="3.5" fill="#45D26B"/>
+              <circle cx="160" cy="45" r="3.5" fill="#E8792B"/>
+              <circle cx="175" cy="45" r="3.5" fill="#1B5CBA"/>
+            </g>
+
+            <!-- Switch -->
+            <g class="pop" style="animation-delay:0.9s">
+              <rect class="shape" x="245" y="32" width="84" height="26" rx="5"/>
+              <rect x="256" y="40" width="12" height="10" rx="1.5" fill="#1B5CBA"/>
+              <rect x="273" y="40" width="12" height="10" rx="1.5" fill="#1B5CBA"/>
+              <rect x="290" y="40" width="12" height="10" rx="1.5" fill="#1B5CBA"/>
+              <rect x="307" y="40" width="12" height="10" rx="1.5" fill="#1B5CBA"/>
+            </g>
+
+            <!-- Desktop PC -->
+            <g class="pop" style="animation-delay:1.45s">
+              <rect class="shape" x="385" y="22" width="46" height="32" rx="4"/>
+              <path class="shape" d="M408 54 V62 M396 64 H420"/>
+              <rect class="shape" x="442" y="22" width="20" height="44" rx="4"/>
+            </g>
+
+            <!-- Laptop -->
+            <g class="pop" style="animation-delay:1.85s">
+              <rect class="shape" x="500" y="26" width="52" height="30" rx="4"/>
+              <rect class="shape" x="492" y="59" width="68" height="6" rx="3"/>
+            </g>
+
+            <!-- Printer -->
+            <g class="pop" style="animation-delay:2.25s">
+              <rect class="shape" x="602" y="24" width="34" height="12" rx="2"/>
+              <rect class="shape" x="592" y="36" width="54" height="22" rx="5"/>
+              <rect class="shape" x="602" y="52" width="34" height="14" rx="2"/>
+            </g>
+
+            <!-- Wi-Fi link to phone -->
+            <path class="line dashed pop" d="M662 45 H712" style="animation-delay:2.5s"/>
+            <g class="pop" style="animation-delay:2.8s">
+              <rect class="shape" x="722" y="20" width="28" height="50" rx="7"/>
+              <circle cx="736" cy="62" r="2.5" fill="#16222D"/>
+            </g>
+
+          </svg>
+          <svg class="wide" viewBox="0 0 1400 90" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path class="line draw" pathLength="1" d="M82 45 H1194" style="animation-delay:0.3s"/>
+            <g class="pop" style="animation-delay:0s">
+              <path class="cloud" d="M20 60 C6 60 4 42 18 40 C17 26 38 20 48 32 C58 22 76 29 72 44 C84 45 84 60 70 60 Z"/>
+            </g>
+            <g class="pop" transform="translate(85 0)" style="animation-delay:0.55s">
+              <path class="shape" d="M143 30 L137 12 M177 30 L183 12"/>
+              <rect class="shape" x="125" y="30" width="70" height="30" rx="6"/>
+              <circle cx="145" cy="45" r="3.5" fill="#45D26B"/>
+              <circle cx="160" cy="45" r="3.5" fill="#E8792B"/>
+              <circle cx="175" cy="45" r="3.5" fill="#1B5CBA"/>
+            </g>
+            <g class="pop" transform="translate(205 0)" style="animation-delay:1.03s">
+              <rect class="shape" x="245" y="32" width="84" height="26" rx="5"/>
+              <rect x="256" y="40" width="12" height="10" rx="1.5" fill="#1B5CBA"/>
+              <rect x="273" y="40" width="12" height="10" rx="1.5" fill="#1B5CBA"/>
+              <rect x="290" y="40" width="12" height="10" rx="1.5" fill="#1B5CBA"/>
+              <rect x="307" y="40" width="12" height="10" rx="1.5" fill="#1B5CBA"/>
+            </g>
+            <g class="pop" transform="translate(315 0)" style="animation-delay:1.52s">
+              <rect class="shape" x="385" y="22" width="46" height="32" rx="4"/>
+              <path class="shape" d="M408 54 V62 M396 64 H420"/>
+              <rect class="shape" x="442" y="22" width="20" height="44" rx="4"/>
+            </g>
+            <g class="pop" transform="translate(438 0)" style="animation-delay:1.98s">
+              <rect class="shape" x="500" y="26" width="52" height="30" rx="4"/>
+              <rect class="shape" x="492" y="59" width="68" height="6" rx="3"/>
+            </g>
+            <g class="pop" transform="translate(548 0)" style="animation-delay:2.4s">
+              <rect class="shape" x="602" y="24" width="34" height="12" rx="2"/>
+              <rect class="shape" x="592" y="36" width="54" height="22" rx="5"/>
+              <rect class="shape" x="602" y="52" width="34" height="14" rx="2"/>
+            </g>
+            <path class="line dashed pop" d="M1212 45 H1352" style="animation-delay:2.65s"/>
+            <g class="pop" transform="translate(646 0)" style="animation-delay:2.95s">
+              <rect class="shape" x="722" y="20" width="28" height="50" rx="7"/>
+              <circle cx="736" cy="62" r="2.5" fill="#16222D"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <section id="services">
+      <div class="wrap">
+        <h2>What I can help with</h2>
+
+        <div class="service">
+          <div>
+            <h3>PC troubleshooting</h3>
+            <p>Desktops and laptops that are slow, unstable, or just not working the way they should.</p>
+          </div>
+          <ul>
+            <li>Slow computers, freezing, and crashes</li>
+            <li>Virus and malware removal</li>
+            <li>Windows errors, updates, and driver problems</li>
+            <li>Hardware diagnosis, repairs, and upgrades</li>
+            <li>New computer setup and moving your files over</li>
+            <li>Backup setup so your files are protected</li>
+          </ul>
+        </div>
+
+        <div class="service">
+          <div>
+            <h3>Data networking</h3>
+            <p>Reliable internet and network setups, whether it's a home or a small business.</p>
+          </div>
+          <ul>
+            <li>Wi-Fi setup and fixing weak or dead spots</li>
+            <li>Router, switch, and access point configuration</li>
+            <li>Diagnosing slow or dropping connections</li>
+            <li>Guest networks and separating devices for security</li>
+            <li>Shared printers, file sharing, and network storage</li>
+            <li>Network cleanup, documentation, and security checks</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="process">
+      <div class="wrap">
+        <h2>How it works</h2>
+        <ol class="steps">
+          <li>
+            <h3>Tell me what's wrong</h3>
+            <p>Send a short email describing the problem or what you'd like set up.</p>
+          </li>
+          <li>
+            <h3>Get a price quote</h3>
+            <p>I'll reply with a clear price before any work begins, so there are no surprises.</p>
+          </li>
+          <li>
+            <h3>Problem solved</h3>
+            <p>I fix it and explain what I did in plain language.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="quote" id="quote">
+      <div class="wrap">
+        <h2>Need a price quote?</h2>
+        <p>For a price quote, please send an email describing what you need to:</p>
+        <a class="email" href="mailto:info@millarsystems.ca?subject=Price%20quote%20request">info@millarsystems.ca</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      &copy; <span id="year">2026</span> MillarSystems.ca. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
